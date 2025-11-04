@@ -1,0 +1,239 @@
+#include <stdio.h>
+#include <stdlib.h> 
+#include <string.h> 
+
+// Definição da estrutura para uma Carta de País
+typedef struct {
+    char nome[50];
+    float populacao;       
+    float pib_per_capita;  
+    float area;            
+    float densidade_demografica; 
+    float indice_gini;     
+    float idh;             
+} Carta;
+
+// Enumeração para facilitar o acesso aos atributos
+typedef enum {
+    ATRIB_NENHUM = 0,
+    ATRIB_POPULACAO = 1,
+    ATRIB_PIB = 2,
+    ATRIB_AREA = 3,
+    ATRIB_DENSIDADE = 4,
+    ATRIB_GINI = 5,
+    ATRIB_IDH = 6
+} Atributo;
+
+// Protótipos das funções
+void limpar_tela();
+void limpar_buffer_simples();
+void inicializar_cartas(Carta cartas[2]);
+float obter_valor_atributo(const Carta *carta, Atributo atrib);
+const char* nome_atributo(Atributo atrib);
+void menu_selecao_atributo(Atributo atrib_ja_selecionado);
+Atributo escolher_atributo(int numero_escolha, Atributo outro_atrib_escolhido);
+const char* legenda_atributo(Atributo atrib);
+
+// Função principal
+int main() {
+    Carta cartas[2];
+    inicializar_cartas(cartas);
+
+    Atributo atrib1 = ATRIB_NENHUM;
+    Atributo atrib2 = ATRIB_NENHUM;
+    
+    limpar_tela();
+    printf("==========================================\n");
+    printf("        Super Trunfo - Nivel Mestre \n");
+    printf("  Comparacao Avancada com Multiplos Atributos\n");
+    printf("==========================================\n\n");
+
+    atrib1 = escolher_atributo(1, ATRIB_NENHUM);
+    if (atrib1 == ATRIB_NENHUM) return 0;
+
+    atrib2 = escolher_atributo(2, atrib1);
+    if (atrib2 == ATRIB_NENHUM) return 0;
+
+    float val1_c1 = obter_valor_atributo(&cartas[0], atrib1);
+    float val2_c1 = obter_valor_atributo(&cartas[0], atrib2);
+    float soma_c1 = val1_c1 + val2_c1;
+
+    float val1_c2 = obter_valor_atributo(&cartas[1], atrib1);
+    float val2_c2 = obter_valor_atributo(&cartas[1], atrib2);
+    float soma_c2 = val1_c2 + val2_c2;
+
+    int vencedor_final; 
+    
+    vencedor_final = (soma_c1 > soma_c2) ? 1 : 
+                     (soma_c2 > soma_c1) ? 2 : 0;
+    
+    limpar_tela();
+    printf("===================================================\n");
+    printf("          Resultado da Rodada Super Trunfo \n");
+    printf("===================================================\n");
+    printf("Atributos Selecionados: **%s** e **%s**\n\n", nome_atributo(atrib1), nome_atributo(atrib2));
+    
+    printf("+---------------------------------+---------------------------+---------------------------+\n");
+    printf("| Detalhes da Comparacao          | %-25s | %-25s |\n", cartas[0].nome, cartas[1].nome);
+    printf("+---------------------------------+---------------------------+---------------------------+\n");
+    printf("| %-31s | %-25.2f | %-25.2f |\n", nome_atributo(atrib1), val1_c1, val1_c2);
+    printf("| %-31s | %-25.2f | %-25.2f |\n", nome_atributo(atrib2), val2_c1, val2_c2);
+    printf("+---------------------------------+---------------------------+---------------------------+\n");
+    printf("| **SOMA DOS ATRIBUTOS** | **%-25.2f** | **%-25.2f** |\n", soma_c1, soma_c2);
+    printf("+---------------------------------+---------------------------+---------------------------+\n\n");
+
+    printf("### LEGENDAS: NUMEROS DE REFERENCIA (Regra de Vitoria Individual)\n");
+    printf("* %s\n", legenda_atributo(atrib1));
+    printf("* %s\n\n", legenda_atributo(atrib2));
+    
+    printf("VENCEDOR DA RODADA: ");
+    if (vencedor_final == 1) {
+        printf("**%s**\n", cartas[0].nome);
+    } else if (vencedor_final == 2) {
+        printf("**%s**\n", cartas[1].nome);
+    } else {
+        printf("**EMPATE!**\n");
+    }
+    printf("\n===================================================\n");
+    printf("Pressione ENTER para fechar...");
+    limpar_buffer_simples();
+    getchar();
+    
+    return 0;
+}
+
+const char* legenda_atributo(Atributo atrib) {
+    if (atrib == ATRIB_DENSIDADE) {
+        return "Densidade Demografica: Vence a carta com o MENOR valor.";
+    } else {
+        return "Outros Atributos: Vence a carta com o MAIOR valor.";
+    }
+}
+
+void limpar_buffer_simples() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+void limpar_tela() {
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+}
+
+void inicializar_cartas(Carta cartas[2]) {
+    static char nome_br[] = "Brasil";
+    int i;
+    for (i = 0; i < 7; i++) cartas[0].nome[i] = nome_br[i];
+    
+    cartas[0].populacao = 217.2;
+    cartas[0].pib_per_capita = 8917.3;
+    cartas[0].area = 8515767.0;
+    cartas[0].densidade_demografica = 25.5; 
+    cartas[0].indice_gini = 48.9; 
+    cartas[0].idh = 0.765;
+
+    static char nome_ch[] = "China";
+    for (i = 0; i < 6; i++) cartas[1].nome[i] = nome_ch[i];
+    
+    cartas[1].populacao = 1425.0;
+    cartas[1].pib_per_capita = 12720.0;
+    cartas[1].area = 9596961.0;
+    cartas[1].densidade_demografica = 148.0;
+    cartas[1].indice_gini = 38.2;
+    cartas[1].idh = 0.783;
+}
+
+float obter_valor_atributo(const Carta *carta, Atributo atrib) {
+    switch ((int)atrib) { 
+        case (int)ATRIB_POPULACAO: return carta->populacao;
+        case (int)ATRIB_PIB: return carta->pib_per_capita;
+        case (int)ATRIB_AREA: return carta->area;
+        case (int)ATRIB_DENSIDADE: return carta->densidade_demografica;
+        case (int)ATRIB_GINI: return carta->indice_gini;
+        case (int)ATRIB_IDH: return carta->idh * 100.0; 
+        default: return 0.0;
+    }
+}
+
+const char* nome_atributo(Atributo atrib) {
+    switch ((int)atrib) {
+        case (int)ATRIB_POPULACAO: return "Populacao (milhoes)";
+        case (int)ATRIB_PIB: return "PIB p/c (USD)";
+        case (int)ATRIB_AREA: return "Area (km2)"; 
+        case (int)ATRIB_DENSIDADE: return "Densidade Demografica";
+        case (int)ATRIB_GINI: return "Indice Gini";
+        case (int)ATRIB_IDH: return "IDH (* 100)";
+        default: return "INVALIDO";
+    }
+}
+
+void menu_selecao_atributo(Atributo atrib_ja_selecionado) {
+    int i; 
+    printf("Selecione um Atributo para Comparacao:\n");
+    printf("--------------------------------------\n");
+
+    for (i = (int)ATRIB_POPULACAO; i <= (int)ATRIB_IDH; i++) {
+        if (i != (int)atrib_ja_selecionado) {
+            printf("[%d] - %s\n", i, nome_atributo((Atributo)i));
+        }
+    }
+    printf("--------------------------------------\n");
+    printf("Digite o numero da opcao: ");
+}
+
+Atributo escolher_atributo(int numero_escolha, Atributo outro_atrib_escolhido) {
+    int escolha;
+    Atributo atrib = ATRIB_NENHUM;
+    int valido = 0;
+
+    while (!valido) {
+        limpar_tela();
+        printf("--- Escolha do %dº Atributo ---\n", numero_escolha);
+        menu_selecao_atributo(outro_atrib_escolhido);
+
+        if (scanf(" %d", &escolha) != 1) { 
+            limpar_buffer_simples();
+            limpar_tela();
+            printf("ERRO: Entrada invalida. Por favor, digite um numero.\n");
+            printf("Pressione ENTER para continuar...\n");
+            getchar();
+            continue;
+        }
+
+        switch (escolha) {
+            case (int)ATRIB_POPULACAO:
+            case (int)ATRIB_PIB:
+            case (int)ATRIB_AREA:
+            case (int)ATRIB_DENSIDADE:
+            case (int)ATRIB_GINI:
+            case (int)ATRIB_IDH:
+                atrib = (Atributo)escolha;
+                if (atrib == outro_atrib_escolhido) {
+                    limpar_tela();
+                    printf("ATENCAO: Voce ja escolheu o atributo **%s**.\n", nome_atributo(atrib));
+                    printf("Por favor, selecione um atributo diferente.\n");
+                    printf("Pressione ENTER para continuar...\n");
+                    limpar_buffer_simples();
+                    getchar();
+                    atrib = ATRIB_NENHUM; 
+                } else {
+                    valido = 1;
+                }
+                break;
+            default:
+                limpar_tela();
+                printf("ERRO: Opcao invalida (**%d**). Por favor, escolha um numero da lista.\n", escolha);
+                printf("Pressione ENTER para continuar...\n");
+                limpar_buffer_simples();
+                getchar();
+        }
+    }
+    printf("\nAtributo selecionado: **%s**\n", nome_atributo(atrib));
+    printf("Pressione ENTER para ir para a proxima etapa...\n");
+    limpar_buffer_simples();
+    getchar(); 
+    return atrib;
+}
