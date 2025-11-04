@@ -1,1 +1,198 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h> 
 
+#ifdef _WIN32
+#include <Windows.h> 
+#include <locale.h>  
+#endif
+
+
+typedef struct {
+    char estado[3];           
+    char codigo_carta[5];     
+    char nome_cidade[50];
+    int populacao;            
+    float area;               
+    float pib;                
+    int num_pontos_turisticos;
+    float densidade_populacional; 
+    float pib_per_capita;         
+} CartaSuperTrunfo;
+
+
+void limpar_buffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {}
+}
+
+
+void cadastrar_carta(CartaSuperTrunfo *carta, int numero) {
+    
+    
+    if (numero == 1) {
+        printf("\n=== Cadastro da Carta 1 (Sugestão: São Paulo) ===\n");
+        printf("   Valores Sugeridos: Código: C01 | Estado: SP | Pop: 12300000 | Area: 1521.11 | PIB: 763.8 | Pontos Turísticos: 25\n"); 
+        printf("Estado: ");
+    } else {
+        printf("\n=== Cadastro da Carta 2 (Sugestão: Rio de Janeiro) ===\n");
+        printf("   Valores Sugeridos: Código: C02 | Estado: RJ | Pop: 6000000 | Area: 1200.00 | PIB: 350.5 | Pontos Turísticos: 30\n"); 
+        printf("Estado: ");
+    }
+
+   
+    scanf(" %2s", carta->estado); 
+    limpar_buffer();
+
+    
+    printf("Código da carta: "); 
+    scanf(" %4s", carta->codigo_carta);
+    limpar_buffer();
+
+    
+    printf("Nome da Cidade: ");
+    scanf(" %49[^\n]", carta->nome_cidade);
+    limpar_buffer();
+
+  
+    printf("População (número inteiro): ");
+    while (scanf("%d", &carta->populacao) != 1) {
+        limpar_buffer();
+        printf("População (número inteiro): ");
+    }
+    limpar_buffer();
+
+   
+    printf("Área em km² (use ponto): ");
+    while (scanf("%f", &carta->area) != 1) {
+        limpar_buffer();
+        printf("Área em km² (use ponto): ");
+    }
+    limpar_buffer();
+
+    
+    printf("PIB em bilhões (use ponto): ");
+    while (scanf("%f", &carta->pib) != 1) {
+        limpar_buffer();
+        printf("PIB em bilhões (use ponto): ");
+    }
+    limpar_buffer();
+
+   
+    printf("Número de Pontos Turísticos: ");
+    while (scanf("%d", &carta->num_pontos_turisticos) != 1) {
+        limpar_buffer();
+        printf("Número de Pontos Turísticos: ");
+    }
+    limpar_buffer();
+}
+
+
+
+void calcular_atributos_derivados(CartaSuperTrunfo *carta) {
+    if (carta->area > 0) {
+        carta->densidade_populacional = (float)carta->populacao / carta->area;
+    } else {
+        carta->densidade_populacional = 0.0;
+    }
+
+    if (carta->populacao > 0) {
+        carta->pib_per_capita = (carta->pib * 1000000000.0) / (float)carta->populacao;
+    } else {
+        carta->pib_per_capita = 0.0;
+    }
+}
+
+
+void comparar_cartas(CartaSuperTrunfo carta1, CartaSuperTrunfo carta2) {
+    
+   
+    float valor1 = (float)carta1.populacao;
+    float valor2 = (float)carta2.populacao;
+    const char *nome_atributo = "População";
+    int menor_vence = 0; 
+    
+    printf("\n\n");
+    printf("Comparação de cartas (Atributo: %s):\n", nome_atributo);
+    printf("\n");
+
+    printf("Carta 1 - %s (%s): %d\n", carta1.nome_cidade, carta1.estado, (int)valor1);
+    printf("Carta 2 - %s (%s): %d\n", carta2.nome_cidade, carta2.estado, (int)valor2);
+
+    printf("\n");
+
+    const char *vencedora = NULL; 
+    int carta_vencedora = 0;      
+
+    if (!menor_vence) {
+        if (valor1 > valor2) {
+            vencedora = carta1.nome_cidade;
+            carta_vencedora = 1;
+        } else if (valor2 > valor1) { 
+            vencedora = carta2.nome_cidade;
+            carta_vencedora = 2;
+        }
+    } else {
+        if (valor1 < valor2) {
+            vencedora = carta1.nome_cidade;
+            carta_vencedora = 1;
+        } else if (valor2 < valor1) { 
+            vencedora = carta2.nome_cidade;
+            carta_vencedora = 2;
+        }
+    }
+    
+    if (vencedora != NULL) {
+        printf("Resultado: Carta %d (%s) venceu!\n", carta_vencedora, vencedora);
+    } else {
+        printf("Resultado: Empate! Os valores de %s são iguais.\n", nome_atributo);
+    }
+    
+    printf("\n");
+}
+
+int main() {
+    
+    #ifdef _WIN32
+        SetConsoleOutputCP(CP_UTF8);
+        setlocale(LC_ALL, "C.UTF-8");
+    #endif
+    
+    CartaSuperTrunfo carta1;
+    CartaSuperTrunfo carta2;
+
+    cadastrar_carta(&carta1, 1);
+    cadastrar_carta(&carta2, 2);
+
+    calcular_atributos_derivados(&carta1);
+    calcular_atributos_derivados(&carta2);
+    
+    printf("\n--- Dados Cadastrados ---\n");
+    
+    printf("\n[CARTA 1: %s (%s)]\n", carta1.nome_cidade, carta1.estado);
+    printf("  Código: %s\n", carta1.codigo_carta);
+    printf("  População: %d\n", carta1.populacao);
+    printf("  Área: %.2f km²\n", carta1.area);
+    printf("  Densidade Populacional: %.2f hab/km²\n", carta1.densidade_populacional);
+    printf("  PIB: %.2f bilhões de R$\n", carta1.pib);
+    printf("  PIB per capita: R$ %.2f\n", carta1.pib_per_capita);
+    printf("  Pontos Turísticos: %d\n", carta1.num_pontos_turisticos);
+           
+    printf("\n[CARTA 2: %s (%s)]\n", carta2.nome_cidade, carta2.estado);
+    printf("  Código: %s\n", carta2.codigo_carta);
+    printf("  População: %d\n", carta2.populacao);
+    printf("  Área: %.2f km²\n", carta2.area);
+    printf("  Densidade Populacional: %.2f hab/km²\n", carta2.densidade_populacional);
+    printf("  PIB: %.2f bilhões de R$\n", carta2.pib);
+    printf("  PIB per capita: R$ %.2f\n", carta2.pib_per_capita);
+    printf("  Pontos Turísticos: %d\n", carta2.num_pontos_turisticos);
+
+    printf("\n");
+
+    comparar_cartas(carta1, carta2);
+
+    printf("\nPressione ENTER para sair...");
+    getchar(); 
+    
+    return 0; 
+}
