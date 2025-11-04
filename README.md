@@ -17,15 +17,7 @@ Receber os dados de duas cartas: O programa deve receber os dados de duas cartas
  Área (float)
  PIB (float)
 
-## 🧩 Como compilar e executar
 
-No terminal (CMD ou PowerShell), dentro da pasta do projeto:
-
-```bash
-gcc super_trunfo_novato.c -o novo super trunfo -Wall -Wextra -std=c11
-novo super trunfo
-
-  
 ### ⚙️ Funcionalidades do Sistema:
 - O sistema permitirá exibir de forma clara, qual carta venceu a comparação, incluindo o atributo utilizado na comparação e os valores das duas cartas para aquele atributo, inserindo manualmente os dados via terminal de comando.
 - Após o cadastro, o sistema exibirá os dados de cada cidade de forma clara e organizada.
