@@ -18,6 +18,17 @@ Receber os dados de duas cartas: O programa deve receber os dados de duas cartas
  PIB (float)
 
 
+## 🧩 Como compilar e executar
+
+No terminal (CMD ou PowerShell), dentro da pasta do projeto:
+
+```bash
+gcc super_trunfo_novato.c -o novo super trunfo -Wall -Wextra -std=c11
+novo super trunfo
+
+```
+
+---
 ### ⚙️ Funcionalidades do Sistema:
 - O sistema permitirá exibir de forma clara, qual carta venceu a comparação, incluindo o atributo utilizado na comparação e os valores das duas cartas para aquele atributo, inserindo manualmente os dados via terminal de comando.
 - Após o cadastro, o sistema exibirá os dados de cada cidade de forma clara e organizada.
@@ -36,6 +47,19 @@ Neste desafio, o Super Trunfo fica mais interessante! Você implementará um men
   - Menu Interativo: Criar um menu interativo no terminal usando a estrutura switch que permita ao jogador escolher qual atributo será usado para comparar as cartas. O menu deve ser claro e fácil de usar.
   - Comparação de Atributos: Implementar a lógica de comparação entre duas cartas com base no atributo selecionado pelo jogador.
 
+
+## 🧩 Como compilar e executar
+
+No terminal (CMD ou PowerShell), dentro da pasta do projeto:
+
+```bash
+gcc super_trunfo_novato.c -o novosupertrunfoaventureiro -Wall -Wextra -std=c11
+novosupertrunfoaventureiro
+
+```
+
+---
+
 ### ⚙️ Funcionalidades do Sistema:
 - O sistema agora calculará automaticamente com base nos dados inseridos.
 
@@ -51,6 +75,19 @@ Neste desafio, o Super Trunfo fica mais interessante! Você implementará um men
 Uma condição
 Um valor se a condição for verdadeira
 Um valor se a condição for falsa
+
+
+## 🧩 Como compilar e executar
+
+No terminal (CMD ou PowerShell), dentro da pasta do projeto:
+
+```bash
+gcc super_trunfo_novato.c -o novosupertrunfo_MESTRE -Wall -Wextra -std=c11
+novosupertrunfo_MESTRE
+
+```
+
+---
 
 ### 🆕 Diferença em relação ao Nível Aventureiro:
 - **Comparação de Cartas:**
